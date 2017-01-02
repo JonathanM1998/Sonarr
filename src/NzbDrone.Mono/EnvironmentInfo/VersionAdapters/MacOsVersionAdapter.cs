@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -13,26 +14,38 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             RegexOptions.IgnoreCase
         );
 
-        private readonly IDiskProvider _diskProvider;
+        private const string PLIST_DIR = "/System/Library/CoreServices/";
 
-        public MacOsVersionAdapter(IDiskProvider diskProvider)
+
+        private readonly IDiskProvider _diskProvider;
+        private readonly Logger _logger;
+
+        public MacOsVersionAdapter(IDiskProvider diskProvider, Logger logger)
         {
             _diskProvider = diskProvider;
+            _logger = logger;
         }
 
         public OsVersionModel Read()
         {
             var version = "10.0";
 
-            var allFiles = _diskProvider.GetFiles("/System/Library/CoreServices/", SearchOption.TopDirectoryOnly);
+            if (!_diskProvider.FolderExists(PLIST_DIR))
+            {
+                _logger.Debug("Directory {0} doesn't exist", PLIST_DIR);
+                return null;
+            }
 
-            var versionFile = allFiles.SingleOrDefault(c=>
+            var allFiles = _diskProvider.GetFiles(PLIST_DIR, SearchOption.TopDirectoryOnly);
+
+            var versionFile = allFiles.SingleOrDefault(c =>
                 c.EndsWith("SystemVersion.plist") ||
                 c.EndsWith("ServerVersion.plist")
             );
 
             if (string.IsNullOrWhiteSpace(versionFile))
             {
+                _logger.Debug("Couldn't find version plist file in {0}", PLIST_DIR);
                 return null;
             }
 

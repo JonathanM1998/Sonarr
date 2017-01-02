@@ -1,9 +1,9 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Windows.EnvironmentInfo;
 
-namespace NzbDrone.Windows.EnvironmentInfo
+namespace NzbDrone.Windows.Test.EnvironmentInfo
 {
     [TestFixture]
     [Platform("Win")]

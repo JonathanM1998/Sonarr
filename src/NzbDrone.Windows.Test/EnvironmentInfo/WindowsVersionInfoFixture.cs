@@ -18,7 +18,6 @@ namespace NzbDrone.Windows.Test.EnvironmentInfo
             info.FullName.Should().Contain("Windows");
             info.FullName.Should().Contain("NT");
             info.FullName.Should().Contain(info.Version);
-
         }
     }
 }

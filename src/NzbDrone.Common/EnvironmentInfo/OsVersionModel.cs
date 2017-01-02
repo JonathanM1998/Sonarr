@@ -2,17 +2,24 @@ namespace NzbDrone.Common.EnvironmentInfo
 {
     public class OsVersionModel
     {
+
+
         public OsVersionModel(string name, string version, string fullName = null)
         {
-            Name = name;
-            Version = version;
+            Name = Trim(name);
+            Version = Trim(version);
 
             if (string.IsNullOrWhiteSpace(fullName))
             {
-                fullName = $"{name} {version}";
+                fullName = $"{Name} {Version}";
             }
 
-            FullName = fullName;
+            FullName = Trim(fullName);
+        }
+
+        private static string Trim(string source)
+        {
+            return source.Trim().Trim('"', '\'');
         }
 
         public string Name { get; }

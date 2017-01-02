@@ -9,7 +9,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo
 {
     [TestFixture]
     [Platform("Mono")]
-    public class LinuxVersionInfoFixture : TestBase<ReleaseFileVersionAdapter>
+    public class ReleaseFileVersionAdapterFixture : TestBase<ReleaseFileVersionAdapter>
     {
         [SetUp]
         public void Setup()
